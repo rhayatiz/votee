@@ -1,11 +1,25 @@
-import { Button } from '@mantine/core';
+import { Button, Flex } from '@mantine/core';
 import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import { HomeHeroSection } from '../components/HomeHeroSection';
+import { Head } from '@inertiajs/inertia-react';
+import Footer from '../components/Footer';
 
 const Home = () => {
+    const [count, setCount] = useState(0)
+    const clickHandler = () => {
+        setCount(count + 1)
+        console.log(`You clicked ${count} times.`)
+    }
+
     return (
         <>
-            <h1 className='text-blue-600'>This is test component</h1>
-            <Button color='teal'>Click me</Button>
+            <Head>
+                <title>Votee - Sondages</title>
+            </Head>
+            <Navbar />
+            <HomeHeroSection />
+            <Footer />
         </>
     )
 }

@@ -4,6 +4,7 @@ import {createRoot} from 'react-dom/client'
 import {createInertiaApp } from '@inertiajs/inertia-react'
 import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers'
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
 createInertiaApp({
     // Below you can see that we are going to get all React components from resources/js/Pages folder
@@ -11,7 +12,8 @@ createInertiaApp({
     setup({ el, App, props }) {
         createRoot(el).render(
             <MantineProvider withGlobalStyles withNormalizeCSS>
-              <App {...props} />
+                <Notifications />
+                <App {...props} />
             </MantineProvider>
         )
     },
