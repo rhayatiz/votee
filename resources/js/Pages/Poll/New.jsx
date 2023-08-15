@@ -1,10 +1,11 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text } from '@mantine/core';
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
 import { notifications } from '@mantine/notifications';
 import PollSimpleForm from '../../components/PollSimpleForm';
 import PollImageForm from '../../components/PollImageForm';
+import { AiOutlineUnlock } from 'react-icons/ai'
 
 const New = () => {
     const [type, setType] = useState('')
@@ -21,9 +22,10 @@ const New = () => {
                 <Box className='shadow-lg rounded-xl
                         p-2 sm:p-8'>
                     <form className='py-4'>
-                        <TextInput placeholder="Mon sondage..." label="Titre" withAsterisk />
+                        <TextInput size='md' placeholder="Mon sondage..." label="Titre" withAsterisk />
                         <Space my={'md'} />
                         <Select
+                            size='md'
                             onChange={setType}
                             data={['Simple', 'Images']}
                             label="Type de sondage"
@@ -44,23 +46,27 @@ const New = () => {
                             </>
                         }
                         
-                        <Checkbox
-                            checked={isSecret}
-                            label="Protégez les résultats avec un mot de passe"
-                            color="teal"
-                            onChange={(event) => setIsSecret(event.currentTarget.checked)}
+                        <Card className='border-[1px] border-gray-200 shadow-sm'>
+                            <Checkbox
+                                size={'md'}
+                                checked={isSecret}
+                                label={<Text ><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
+                                color="teal"
+                                onChange={(event) => setIsSecret(event.currentTarget.checked)}
                             />
-                        {isSecret &&
-                            <>
-                                <Space my={'md'} />
-                                <PasswordInput
-                                    placeholder="Mot de passe"
-                                    label="Mot de passe"
-                                    description="Ce code vous permettra de visualiser les résultats de votre sondage"
-                                    withAsterisk
-                                    />
-                            </>
-                        }
+                            {isSecret &&
+                                <>
+                                    <Space my={'md'} />
+                                    <PasswordInput
+                                        placeholder="Mot de passe"
+                                        label="Mot de passe"
+                                        description="Ce code vous permettra d'accéder aux résultats du sondage"
+                                        withAsterisk
+                                        />
+                                </>
+                            }
+                        </Card>
+
                         <Button type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
                     </form>
                 </Box>

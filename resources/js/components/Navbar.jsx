@@ -47,57 +47,35 @@ const useStyles = createStyles((theme) => ({
 export default function Navbar() {
   const links = [
       {
-        "link": "/about",
-        "label": "Features"
+        "link": "/",
+        "label": "Accueil"
       },
       {
-        "link": "#1",
-        "label": "Learn",
-        "links": [
-          {
-            "link": "/docs",
-            "label": "Documentation"
-          },
-          {
-            "link": "/resources",
-            "label": "Resources"
-          },
-          {
-            "link": "/community",
-            "label": "Community"
-          },
-          {
-            "link": "/blog",
-            "label": "Blog"
-          }
-        ]
+        "link": "/poll",
+        "label": "Nouveau sondage"
       },
       {
-        "link": "/about",
-        "label": "About"
+        "link": "/faq",
+        "label": "FAQ"
       },
-      {
-        "link": "/pricing",
-        "label": "Pricing"
-      },
-      {
-        "link": "#2",
-        "label": "Support",
-        "links": [
-          {
-            "link": "/faq",
-            "label": "FAQ"
-          },
-          {
-            "link": "/demo",
-            "label": "Book a demo"
-          },
-          {
-            "link": "/forums",
-            "label": "Forums"
-          }
-        ]
-      }
+      // {
+      //   "link": "#2",
+      //   "label": "Support",
+      //   "links": [
+      //     {
+      //       "link": "/faq",
+      //       "label": "FAQ"
+      //     },
+      //     {
+      //       "link": "/demo",
+      //       "label": "Book a demo"
+      //     },
+      //     {
+      //       "link": "/forums",
+      //       "label": "Forums"
+      //     }
+      //   ]
+      // }
     ]
 
   const [opened, { toggle }] = useDisclosure(false);
@@ -105,7 +83,7 @@ export default function Navbar() {
 
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+      <Menu.Item component='a' href={item.link} key={item.link}>{item.label}</Menu.Item>
     ));
 
     if (menuItems) {
