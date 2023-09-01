@@ -108,7 +108,7 @@ export function HomeHeroSection() {
 
         <Container p={0} size={600}>
           <Text size="lg" color="dimmed" className={classes.description}>
-            Créez gratuitement vos sondages, publiez, recueillez, et visualisez vos résultats.
+            Créez gratuitement vos sondages, publiez, recueillez et visualisez vos résultats.
           </Text>
         </Container>
 

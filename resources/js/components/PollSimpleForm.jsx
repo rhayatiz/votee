@@ -1,8 +1,9 @@
-import { ActionIcon, Box, Group, Text, TextInput } from "@mantine/core"
+import { ActionIcon, Box, Button, Group, Stack, Text, TextInput } from "@mantine/core"
 import { randomId } from "@mantine/hooks"
 import { find, findIndex, pullAt } from "lodash"
 import { useState } from "react"
 import { AiOutlinePlusCircle, AiOutlineCloseCircle } from "react-icons/ai"
+import QuestionRow from "./QuestionRow"
 
 export default function PollSimpleForm(props) {
     const [questions, setQuestions] = useState([{
@@ -10,15 +11,12 @@ export default function PollSimpleForm(props) {
         key: randomId()
     }])
 
-    const QuestionRow = ({row, idx}) => (
-        <Box className="mt-1">
-            <TextInput 
-                label={`Question ${idx}`}
-                placeholder="Question"
-                rightSection={<ActionIcon onClick={() => removeQuestion(row.id)} variant="transparent" color="red"><AiOutlineCloseCircle size={16} /></ActionIcon>}
-                />
-        </Box>
-    )
+    const AddQuestionButton = () => <Group position="right" mt="sm">
+        <Button color="dark" className="bg-zinc-700 text-white" size="sm" onClick={() => addQuestion()} >
+            <Text mr={"sm"} >Ajouter question</Text>
+            <AiOutlinePlusCircle color="white" size={18} />
+        </Button>
+    </Group>
 
     const addQuestion = () => {
         let nextId = 1
@@ -37,11 +35,8 @@ export default function PollSimpleForm(props) {
     return (
         <>
             <Box className="rounded-lg border border-red-700">
-                {questions.map((row, idx) => <QuestionRow key={row.key} row={row} idx={idx+1} />)}
-                <Group position="right">
-                    <ActionIcon variant="transparent" mt={"sm"} onClick={() => addQuestion()} size={'lg'}>
-                        <AiOutlinePlusCircle color="black" size={23} /></ActionIcon>
-                </Group>
+                {questions.map((row, idx) => <QuestionRow key={row.key} row={row} idx={idx+1} removeQuestionHandler={removeQuestion}  />)}
+                <AddQuestionButton/>
             </Box>
         </>
     )
