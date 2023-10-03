@@ -7,59 +7,63 @@ import PollSimpleForm from '../../components/PollSimpleForm';
 import PollImageForm from '../../components/PollImageForm';
 import { AiOutlineUnlock } from 'react-icons/ai'
 import Footer from '../../components/Footer';
+import { router } from '@inertiajs/react'
+import { useForm } from '@mantine/form';
+import { randomId } from "@mantine/hooks"
 
 const New = () => {
-    const [type, setType] = useState('Simple')
-    const [isSecret, setIsSecret] = useState(false)
+    const form = useForm({
+        initialValues: {
+            title: 'random question?',
+            isProtected: false,
+            password: '',
+            questions: [
+                {
+                    id: 1,
+                    key: randomId(),
+                    type: 'unique',
+                    label: ''
+                }
+            ]
+        },
+
+        validate: {
+            title: (v) => v == '' ? 'Veuillez renseigner le titre du sondage' : null
+        },
+    });
+
+    function handleSubmit(values) {
+        // router.post('/poll')
+
+        console.log('values', values)
+    }
 
     return (
         <>
             <Head>
-                <title>votee - Nouveau sondage</title>
+                <title>Nouveau sondage</title>
             </Head>
             <Navbar />
             <Container>
                 <Title  order={2}>Nouveau sondage</Title>
                 <Box className='shadow-lg rounded-xl
                         p-2 sm:p-8'>
-                    <form className='py-4'>
-                        {/* <Select
-                            size='md'
-                            onChange={setType}
-                            data={[
-                                {value: 'Simple', label: 'Simple', disabled: false},
-                                {value: 'Images', label: 'Images', disabled: true},
-                            ]}
-                            label="Type de sondage"
-                            placeholder="Choisir un type"
-                            withAsterisk
-                            /> */}
+                    <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                         <Space my={'md'} />
-                        <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk />
+                        <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
+                           {...form.getInputProps('title')} />
                         <Space my={'md'} />
-                        {type == 'Simple' &&
-                            <>
-                                <Space my={'md'} />
-                                <PollSimpleForm />
-                            </>
-                        }
-                        {type == 'Images' &&
-                            <>
-                                <Space my={'md'} />
-                                <PollImageForm />
-                            </>
-                        }
+                        <PollSimpleForm form={form}/>
                         
                         <Space my={'xl'} />
                         <Card className='border-[1px] border-gray-200 shadow-sm'>
                             <Checkbox
                                 size={'sm'}
-                                checked={isSecret}
                                 label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
                                 color="teal"
-                                onChange={(event) => setIsSecret(event.currentTarget.checked)}
+                                {...form.getInputProps('isProtected', {type: 'checkbox'})}
                             />
-                            {isSecret &&
+                            {form.values.isProtected &&
                                 <>
                                     <Space my={'md'} />
                                     <PasswordInput
@@ -72,7 +76,7 @@ const New = () => {
                             }
                         </Card>
 
-                        <Button type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
+                        <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
                     </form>
                 </Box>
             </Container>

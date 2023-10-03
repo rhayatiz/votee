@@ -15,7 +15,7 @@ const Home = () => {
     return (
         <>
             <Head>
-                <title>Votee - Sondages</title>
+                <title>Création de sondages gratuits</title>
             </Head>
             <Navbar />
             <HomeHeroSection />
