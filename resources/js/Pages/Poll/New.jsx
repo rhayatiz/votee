@@ -1,4 +1,4 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List } from '@mantine/core';
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
@@ -12,6 +12,7 @@ import { useForm } from '@mantine/form';
 import { randomId } from "@mantine/hooks"
 
 const New = () => {
+    const [errors, setErrors] = useState(['error example'])
     const form = useForm({
         initialValues: {
             title: 'random question?',
@@ -36,6 +37,7 @@ const New = () => {
         // router.post('/poll')
 
         console.log('values', values)
+        console.log('values.questions', values.questions)
     }
 
     return (
@@ -74,6 +76,12 @@ const New = () => {
                                         />
                                 </>
                             }
+                        </Card>
+
+                        <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
+                            <List size={'sm'}>
+                                {errors.map((err) => <List.Item><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
+                            </List>
                         </Card>
 
                         <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
