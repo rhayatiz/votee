@@ -1,5 +1,5 @@
 import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List } from '@mantine/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
 import { notifications } from '@mantine/notifications';
@@ -9,10 +9,10 @@ import { AiOutlineUnlock } from 'react-icons/ai'
 import Footer from '../../components/Footer';
 import { router } from '@inertiajs/react'
 import { useForm } from '@mantine/form';
-import { randomId } from "@mantine/hooks"
+import { randomId, useDidUpdate } from "@mantine/hooks"
 
 const New = () => {
-    const [errors, setErrors] = useState(['error example'])
+    const [errors, setErrors] = useState(false)
     const form = useForm({
         initialValues: {
             title: 'random question?',
@@ -22,8 +22,12 @@ const New = () => {
                 {
                     id: 1,
                     key: randomId(),
-                    type: 'unique',
-                    label: ''
+                    type: 'radio',
+                    label: '',
+                    answers: [
+                        { id: 1, key: randomId(), label: '' },
+                        { id: 2, key: randomId(), label: '' },
+                    ]
                 }
             ]
         },
@@ -33,11 +37,34 @@ const New = () => {
         },
     });
 
-    function handleSubmit(values) {
-        // router.post('/poll')
+    useEffect(() => {
+        console.log('form.values', form.values)
+        if (errors.length == 0) {
+            validate(form.values)
+        }
+    }, [errors])
+    
 
+    function handleSubmit(values) {
+        setErrors([])
         console.log('values', values)
         console.log('values.questions', values.questions)
+    }
+
+    const findQuestionIndex = (key) => {
+        return form.values.questions.map(function(e) { return e.key; }).indexOf(key)
+    }
+
+    function validate(values) {
+        if (values.questions.length == 0) {
+            setErrors([...errors, 'Veuillez ajouter au moins une question'])
+        }
+        values.questions.forEach(question => {
+            if (question.label == "") {
+                let questionIndex = findQuestionIndex(question.key)
+                form.values.questions[questionIndex].error = "Veuillez renseigner le champ"
+            }
+        });
     }
 
     return (
@@ -77,13 +104,13 @@ const New = () => {
                                 </>
                             }
                         </Card>
-
-                        <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
-                            <List size={'sm'}>
-                                {errors.map((err) => <List.Item><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
-                            </List>
-                        </Card>
-
+                        {errors.length > 0 &&
+                            <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
+                                <List size={'sm'}>
+                                    {errors.map((err, idx) => <List.Item key={idx}><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
+                                </List>
+                            </Card>
+                        }
                         <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
                     </form>
                 </Box>

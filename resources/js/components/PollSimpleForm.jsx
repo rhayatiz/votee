@@ -23,8 +23,12 @@ export default function PollSimpleForm(props) {
         let newQuestion = {
             id: nextId,
             key: randomId(),
-            type: 'unique',
-            label: ''
+            type: 'radio',
+            label: '',
+            answers: [
+                { id: 1, key: randomId(), label: '' },
+                { id: 2, key: randomId(), label: '' },
+            ]
         }
         form.setFieldValue('questions', [...questions, newQuestion])
     }
@@ -37,7 +41,7 @@ export default function PollSimpleForm(props) {
         <>
             <Box className="rounded-lg border border-red-700">
                 {form.values.questions.map((row, idx) => 
-                    <QuestionRow key={row.key} row={row} idx={idx+1} 
+                    <QuestionRow key={row.key} row={row} idx={idx+1} questionIndex={idx}
                         removeQuestionHandler={removeQuestion} form={props.form} />)}
                 <AddQuestionButton/>
             </Box>

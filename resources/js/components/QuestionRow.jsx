@@ -5,46 +5,41 @@ import { useState } from "react";
 import { randomId } from "@mantine/hooks";
 import AnswerRow from "./AnswerRow";
 
-export default function QuestionRow({row, idx, removeQuestionHandler, form}) {
-    const [answerType, setAnswerType] = useState('radio')
-    const [answers, setAnswers] = useState([
-        { id: 1, key: randomId() },
-        { id: 2, key: randomId() },
-    ])
-
+export default function QuestionRow({row, idx, removeQuestionHandler, form, questionIndex}) {
     const typeChangeHandler = (type) => {
         if (type == 'input') {
-            setAnswers([{ id: 1, key: randomId() }])
+            form.setFieldValue(`questions.${questionIndex}.answers`, [{ id: 1, key: randomId(), label: '' }])
         } else {
-            setAnswers([
-                { id: 1, key: randomId() },
-                { id: 2, key: randomId() },
+            form.setFieldValue(`questions.${questionIndex}.answers`, [
+                { id: 1, key: randomId(), label: '' },
+                { id: 2, key: randomId(), label: '' },
             ])
         }
-        setAnswerType(type)
+        form.setFieldValue(`questions.${questionIndex}.type`, type)
     }
 
-    const inputChangeHandler = (key, e) => {
+    const inputChangeHandler = (e) => {
         const questions = [...form.values.questions]
-        var index = questions.map(function(e) { return e.key; }).indexOf(key)
-        questions[index].label = e.target.value
+        questions[questionIndex].label = e.target.value
         form.setFieldValue('questions', questions)
     }
 
     const addAnswer = () => {
+        const answers = form.values.questions[questionIndex].answers
         let nextId = 1
         if (answers.length > 0) nextId = answers[answers.length - 1].id + 1
         let newAnswer = {
             key: randomId(),
             id: nextId
         }
-        setAnswers([...answers, newAnswer])
+        form.setFieldValue(`questions.${questionIndex}.answers`, [...answers, newAnswer])
     }
 
     const removeAnswer = (id) => {
-        console.log('removing answer', id)
-        console.log('answers', answers)
-        setAnswers(answers.filter((answer) => answer.id != id))
+        let answers = form.values.questions[questionIndex].answers
+        var answerIndex = answers.map(function(e) { return e.id; }).indexOf(id)
+        answers.splice(answerIndex, 1)
+        form.setFieldValue(`questions.${questionIndex}.answers`, [...answers])
     }
 
     const AddAnswerRow = () => <Group position="right" mt="sm">
@@ -65,7 +60,8 @@ export default function QuestionRow({row, idx, removeQuestionHandler, form}) {
                 <TextInput
                     label={`Question ${idx}`}
                     placeholder="Quel est votre plat préféré ?"
-                    onChange={(e) => inputChangeHandler(row.key, e)}
+                    onChange={(e) => inputChangeHandler(e)}
+                    error={row.error || null}
                     />
                 <Flex className="flex-col md:flex-row" justify={'space-between'}>
                     <Text fz={'sm'} weight={400}>Réponses</Text>
@@ -75,9 +71,10 @@ export default function QuestionRow({row, idx, removeQuestionHandler, form}) {
                     </Group>
                 </Flex>
                 <Box className="relative -top-2">
-                    {answers.map((row, index) => 
-                        <AnswerRow type={answerType} key={row.key} row={row} index={index} idx={row.id} form={form} removeAnswerHandler={removeAnswer}  />)}
-                    <AddAnswerRow />
+                    {form.values.questions[questionIndex].answers.map((answerRow, index) => 
+                        <AnswerRow key={answerRow.key} type={form.values.questions[questionIndex].type} questionKey={row.key} row={answerRow} index={index} idx={answerRow.id} form={form} removeAnswerHandler={removeAnswer}  />)}
+                    {form.values.questions[questionIndex].type != "input" &&
+                        <AddAnswerRow />}
                 </Box>
             </Stack>
 
