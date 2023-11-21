@@ -35,6 +35,7 @@ export default function AnswerRow({type, row,index, idx, removeAnswerHandler, fo
                     onChange={(e) => inputChangeHandler(questionKey, row.key, e)}
                     placeholder={answerPlaceholder}
                     icon={answerTypeIcon}
+                    error={row.error || null}
                     withAsterisk
                     />
                 {index != 0 && index != 1 &&

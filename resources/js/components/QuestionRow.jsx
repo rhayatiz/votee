@@ -30,7 +30,8 @@ export default function QuestionRow({row, idx, removeQuestionHandler, form, ques
         if (answers.length > 0) nextId = answers[answers.length - 1].id + 1
         let newAnswer = {
             key: randomId(),
-            id: nextId
+            id: nextId,
+            label: ''
         }
         form.setFieldValue(`questions.${questionIndex}.answers`, [...answers, newAnswer])
     }

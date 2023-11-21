@@ -56,15 +56,30 @@ const New = () => {
     }
 
     function validate(values) {
+        let newErrors = [...errors]
+        console.log('useeffect')
+        console.log('values.questions', values.questions)
         if (values.questions.length == 0) {
-            setErrors([...errors, 'Veuillez ajouter au moins une question'])
+            setErrors([...newErrors, 'Veuillez ajouter au moins une question'])
         }
         values.questions.forEach(question => {
+            let questionIndex = findQuestionIndex(question.key)
+            let questionError = null
             if (question.label == "") {
-                let questionIndex = findQuestionIndex(question.key)
-                form.values.questions[questionIndex].error = "Veuillez renseigner le champ"
+                questionError = ' '
+            } 
+            form.setFieldValue(`questions.${questionIndex}.error`, questionError)
+            if (question.answers.length > 0) {
+                question.answers.forEach(answer => {
+                    let answerError = null
+                    let answerIndex = question.answers.map(function(e) { return e.key; }).indexOf(answer.key)
+                    if (answer.label == "") {
+                        answerError = ' '
+                    } 
+                    form.setFieldValue(`questions.${questionIndex}.answers.${answerIndex}.error`, answerError)
+                })
             }
-        });
+        })
     }
 
     return (
