@@ -11,4 +11,12 @@ class PollController extends Controller
     {
         return Inertia::render('Poll/New', []);
     }
+
+    public function create(Request $request)
+    {
+        $inputArray = $request->getContent();
+        $inputArray = json_decode($inputArray);
+        
+        dd($inputArray);
+    }
 }

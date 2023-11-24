@@ -1,4 +1,4 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
@@ -38,7 +38,6 @@ const New = () => {
     });
 
     useEffect(() => {
-        console.log('form.values', form.values)
         if (errors.length == 0) {
             validate(form.values)
         }
@@ -46,9 +45,9 @@ const New = () => {
     
 
     function handleSubmit(values) {
-        setErrors([])
-        console.log('values', values)
-        console.log('values.questions', values.questions)
+        // triggers validate in useeffect
+        setErrors([]) 
+        router.post('/poll', values)
     }
 
     const findQuestionIndex = (key) => {
@@ -57,8 +56,7 @@ const New = () => {
 
     function validate(values) {
         let newErrors = [...errors]
-        console.log('useeffect')
-        console.log('values.questions', values.questions)
+        let emptyInputs = false
         if (values.questions.length == 0) {
             setErrors([...newErrors, 'Veuillez ajouter au moins une question'])
         }
@@ -67,6 +65,7 @@ const New = () => {
             let questionError = null
             if (question.label == "") {
                 questionError = ' '
+                emptyInputs = true
             } 
             form.setFieldValue(`questions.${questionIndex}.error`, questionError)
             if (question.answers.length > 0) {
@@ -75,11 +74,15 @@ const New = () => {
                     let answerIndex = question.answers.map(function(e) { return e.key; }).indexOf(answer.key)
                     if (answer.label == "") {
                         answerError = ' '
+                        emptyInputs = true
                     } 
                     form.setFieldValue(`questions.${questionIndex}.answers.${answerIndex}.error`, answerError)
                 })
             }
         })
+        if (emptyInputs) {
+            setErrors([...newErrors, 'Veuillez renseigner les champs nécessaires'])
+        }
     }
 
     return (
@@ -89,7 +92,7 @@ const New = () => {
             </Head>
             <Navbar />
             <Container>
-                <Title  order={2}>Nouveau sondage</Title>
+                <Title order={2}>Nouveau sondage</Title>
                 <Box className='shadow-lg rounded-xl
                         p-2 sm:p-8'>
                     <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
@@ -100,8 +103,8 @@ const New = () => {
                         <PollSimpleForm form={form}/>
                         
                         <Space my={'xl'} />
-                        <Card className='border-[1px] border-gray-200 shadow-sm'>
-                            <Checkbox
+                        <Card className='bg-gray-50/50' shadow='lg' radius={'md'}>
+                            <Switch
                                 size={'sm'}
                                 label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
                                 color="teal"
