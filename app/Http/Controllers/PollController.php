@@ -16,7 +16,7 @@ class PollController extends Controller
     {
         $inputArray = $request->getContent();
         $inputArray = json_decode($inputArray);
-        
-        dd($inputArray);
+
+        return Inertia::location(route('home'));
     }
 }

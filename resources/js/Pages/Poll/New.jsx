@@ -1,4 +1,4 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch, Loader } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
@@ -13,6 +13,7 @@ import { randomId, useDidUpdate } from "@mantine/hooks"
 
 const New = () => {
     const [errors, setErrors] = useState(false)
+    const [loading, setLoading] = useState(false)
     const form = useForm({
         initialValues: {
             title: 'random question?',
@@ -45,14 +46,17 @@ const New = () => {
     
 
     function handleSubmit(values) {
+        setLoading(true)
         // triggers validate in useeffect
-        setErrors([]) 
-        router.post('/poll', values)
+        // setErrors([]) 
+        // router.post('/poll', values)
     }
 
     const findQuestionIndex = (key) => {
         return form.values.questions.map(function(e) { return e.key; }).indexOf(key)
     }
+
+    const submitButtonContent = loading ? <Loader color="white" size={'sm'} /> : 'Créer'
 
     function validate(values) {
         let newErrors = [...errors]
@@ -118,6 +122,7 @@ const New = () => {
                                         label="Mot de passe"
                                         description="Ce code vous permettra d'accéder aux résultats du sondage"
                                         withAsterisk
+                                        {...form.getInputProps('password')}
                                         />
                                 </>
                             }
@@ -129,7 +134,7 @@ const New = () => {
                                 </List>
                             </Card>
                         }
-                        <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>Créer</Button>
+                        <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>{submitButtonContent}</Button>
                     </form>
                 </Box>
             </Container>
