@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Response extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['label', 'question_id'];
+    public $timestamps = false;
 }

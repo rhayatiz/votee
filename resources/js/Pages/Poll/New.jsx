@@ -12,7 +12,7 @@ import { useForm } from '@mantine/form';
 import { randomId, useDidUpdate } from "@mantine/hooks"
 
 const New = () => {
-    const [errors, setErrors] = useState(false)
+    const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(false)
     const form = useForm({
         initialValues: {
@@ -39,16 +39,21 @@ const New = () => {
     });
 
     useEffect(() => {
-        if (errors.length == 0) {
-            validate(form.values)
-        }
+        console.log('errors useeffect', errors)
+
+        // if (errors.length == 0) {
+        //     validate(form.values)
+        //     console.log('errors useeffect', errors)
+        // }
     }, [errors])
     
 
     function handleSubmit(values) {
-        setLoading(true)
+        validate(form.values)
+        // setLoading(true)
         // triggers validate in useeffect
         // setErrors([]) 
+        console.log('errors', errors)
         // router.post('/poll', values)
     }
 
@@ -59,10 +64,11 @@ const New = () => {
     const submitButtonContent = loading ? <Loader color="white" size={'sm'} /> : 'Créer'
 
     function validate(values) {
-        let newErrors = [...errors]
+        setErrors([])
         let emptyInputs = false
         if (values.questions.length == 0) {
-            setErrors([...newErrors, 'Veuillez ajouter au moins une question'])
+            setErrors(['Veuillez ajouter au moins une question'])
+            return
         }
         values.questions.forEach(question => {
             let questionIndex = findQuestionIndex(question.key)
@@ -79,13 +85,18 @@ const New = () => {
                     if (answer.label == "") {
                         answerError = ' '
                         emptyInputs = true
-                    } 
+                    }
                     form.setFieldValue(`questions.${questionIndex}.answers.${answerIndex}.error`, answerError)
                 })
             }
         })
         if (emptyInputs) {
-            setErrors([...newErrors, 'Veuillez renseigner les champs nécessaires'])
+            setErrors(['Veuillez renseigner les champs nécessaires'])
+        } else {
+            if (errors.length == 0) {
+                console.log('posting')
+                router.post('/poll', values)
+            }
         }
     }
 
