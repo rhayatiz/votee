@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PollController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/poll', [PollController::class, 'index']);
-Route::post('/poll', [PollController::class, 'create']);
+Route::prefix('poll')->group(function () {
+    Route::get('/', [PollController::class, 'index']);
+    Route::post('/', [PollController::class, 'create']);
+    Route::get('/success', [PollController::class, 'created'])->name('poll.created');
+    Route::get('/{slug}', [PollController::class, 'show'])->name('poll.show');
+});
+
+Route::prefix('vote')->group(function () {
+    Route::post('/submit', [VoteController::class, 'submit']);
+});

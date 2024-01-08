@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\Response;
+use App\Repositories\PollRepository;
 use App\Services\SlugService;
+use Exception;
 use Hashids\Hashids;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -24,30 +26,54 @@ class PollController extends Controller
         $inputArray = $request->getContent();
         $inputArray = json_decode($inputArray, true);
 
-        $inputArray['slug'] = $slugService->getNextSlug();
+        $slug = $slugService->getNextSlug();
+        $inputArray['slug'] = $slug;
     
-        // DB::transaction(function() use ($inputArray) {
-        //     // todo move to repository / service
-        //     $poll = Poll::create($inputArray);
-        //     // $poll->save();
+        // todo move to repository / service
+        DB::beginTransaction();
+        try {
+            $poll = Poll::create($inputArray);
+            // create questions
+            foreach ($inputArray['questions'] as $questionArray) {
+                $questionArray['poll_id'] = $poll->id;
+                $question = Question::create($questionArray);
+                foreach ($questionArray['answers'] as $answerArray) {
+                    $answerArray['question_id'] = $question->id;
+                    Response::create($answerArray);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            // handle exception error UI
+            dd($th);
+        }
+        DB::commit();
             
-        //     // create questions
-        //     foreach ($inputArray['questions'] as $questionArray) {
-        //         $questionArray['poll_id'] = $poll->id;
-        //         $question = Question::create($questionArray);
-        //         // $question->save();
-                
-        //         foreach ($questionArray['answers'] as $answerArray) {
-        //             $answerArray['question_id'] = $question->id;
-        //             $answer = Response::create($answerArray);
-        //             // $answer->save();
-        //         }
-        //     }
-        // });
-            
+        $link = $slugService->getPollLink($slug);
 
-        dd($inputArray, Uuid::uuid1(), $slugService->getNextSlug());
+        // redirect not working properly
+        return redirect()->route('poll.created',[
+            'poll' => $slug
+        ]);
+    }
 
-        // return Inertia::location(route('home'));
+    public function created(Request $request, SlugService $slugService)
+    {
+        $slug = $request->get('poll');
+        $link = $slugService->getPollLink($slug);
+        return Inertia::render('Poll/Created', [
+            'link' => $link
+        ]);
+    }
+
+    public function show(string $slug, PollRepository $pollRepository)
+    {
+        $poll = $pollRepository->findBySlug($slug);
+        $id = $poll->id;
+        $poll = Poll::with('questions', 'questions.responses')->find($id);
+
+        return Inertia::render('Poll/Show', [
+            'poll' => $poll
+        ]);
     }
 }

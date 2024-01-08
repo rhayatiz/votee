@@ -1,4 +1,4 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch, Loader } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch, Loader, LoadingOverlay } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
@@ -50,7 +50,6 @@ const New = () => {
 
     function handleSubmit(values) {
         validate(form.values)
-        // setLoading(true)
         // triggers validate in useeffect
         // setErrors([]) 
         console.log('errors', errors)
@@ -60,8 +59,6 @@ const New = () => {
     const findQuestionIndex = (key) => {
         return form.values.questions.map(function(e) { return e.key; }).indexOf(key)
     }
-
-    const submitButtonContent = loading ? <Loader color="white" size={'sm'} /> : 'Créer'
 
     function validate(values) {
         setErrors([])
@@ -95,7 +92,10 @@ const New = () => {
         } else {
             if (errors.length == 0) {
                 console.log('posting')
-                router.post('/poll', values)
+                setTimeout(() => {
+                    // setLoading(true)
+                    router.post('/poll', values)
+                }, 1000);
             }
         }
     }
@@ -111,41 +111,47 @@ const New = () => {
                 <Box className='shadow-lg rounded-xl
                         p-2 sm:p-8'>
                     <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-                        <Space my={'md'} />
-                        <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
-                           {...form.getInputProps('title')} />
-                        <Space my={'md'} />
-                        <PollSimpleForm form={form}/>
-                        
-                        <Space my={'xl'} />
-                        <Card className='bg-gray-50/50' shadow='lg' radius={'md'}>
-                            <Switch
-                                size={'sm'}
-                                label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
-                                color="teal"
-                                {...form.getInputProps('isProtected', {type: 'checkbox'})}
-                            />
-                            {form.values.isProtected &&
-                                <>
-                                    <Space my={'md'} />
-                                    <PasswordInput
-                                        placeholder="Mot de passe"
-                                        label="Mot de passe"
-                                        description="Ce code vous permettra d'accéder aux résultats du sondage"
-                                        withAsterisk
-                                        {...form.getInputProps('password')}
-                                        />
-                                </>
-                            }
-                        </Card>
-                        {errors.length > 0 &&
-                            <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
-                                <List size={'sm'}>
-                                    {errors.map((err, idx) => <List.Item key={idx}><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
-                                </List>
+                        <Box pos={'relative'}>
+                            <LoadingOverlay visible={loading} zIndex={1000}/>
+                            <Space my={'md'} />
+                            <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
+                            {...form.getInputProps('title')} />
+                            <Space my={'md'} />
+                            <PollSimpleForm form={form}/>
+                            
+                            <Space my={'xl'} />
+                            <Card className='bg-gray-50/50' shadow='lg' radius={'md'}>
+                                <Switch
+                                    size={'sm'}
+                                    label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
+                                    color="teal"
+                                    {...form.getInputProps('isProtected', {type: 'checkbox'})}
+                                />
+                                {form.values.isProtected &&
+                                    <>
+                                        <Space my={'md'} />
+                                        <PasswordInput
+                                            placeholder="Mot de passe"
+                                            label="Mot de passe"
+                                            description="Ce code vous permettra d'accéder aux résultats du sondage"
+                                            withAsterisk
+                                            {...form.getInputProps('password')}
+                                            />
+                                    </>
+                                }
                             </Card>
-                        }
-                        <Button size='lg' fz={"md"} radius={"md"} type='submit' color='teal' fullWidth mt={'lg'}>{submitButtonContent}</Button>
+                            {errors.length > 0 &&
+                                <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
+                                    <List size={'sm'}>
+                                        {errors.map((err, idx) => <List.Item key={idx}><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
+                                    </List>
+                                </Card>
+                            }
+                        </Box>
+
+                        <Button disabled={loading} size='lg' fz={"md"} 
+                            radius={"md"} type='submit' color='teal' 
+                            fullWidth mt={'lg'}>Créer</Button>
                     </form>
                 </Box>
             </Container>

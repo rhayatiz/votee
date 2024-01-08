@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\PollRepository;
 use Hashids\Hashids;
+use Illuminate\Support\Facades\URL;
 use Ramsey\Uuid\Uuid;
 
 class SlugService 
@@ -19,6 +20,13 @@ class SlugService
     {
         $hashid = new Hashids(Uuid::uuid1());
         $slug = $hashid->encode(1, 2, 3);
+
+        // prevent double slugs
+        while ($this->checkIfSlugExists($slug)) {
+            $hashid = new Hashids(Uuid::uuid1());
+            $slug = $hashid->encode(1, 2, 3);
+        }
+        
         return $slug;
     }
 
@@ -28,6 +36,11 @@ class SlugService
             return true;
         }
         return false;
+    }
+
+    public function getPollLink(string $slug): string
+    {
+        return URL::to('') . '/' . $slug;
     }
 
 }

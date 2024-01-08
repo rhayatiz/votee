@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Poll extends Model
 {
@@ -12,4 +13,9 @@ class Poll extends Model
      * @var array
      */
     protected $fillable = ['title', 'isProtected', 'password', 'slug'];
+
+    public function questions(): HasMany
+    {
+        return $this->HasMany(Question::class);
+    }
 }
