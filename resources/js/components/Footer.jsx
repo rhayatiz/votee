@@ -6,7 +6,7 @@ export default function Footer({className}) {
     const year = moment().year()
 
     return (
-        <footer className={`w-full h-36 p-1 mt-24 ${className}`}>
+        <footer className={`w-full h-36 p-1 mt-24 absolute bottom-4 ${className}`}>
             <Container 
                 className="bg-gradient-to-r from-slate-800 to-zinc-900 rounded-xl shadow-lg
                             w-full h-full

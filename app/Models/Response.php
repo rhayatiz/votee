@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Response extends Model
@@ -22,5 +23,10 @@ class Response extends Model
     public function question(): BelongsTo
     {
         return $this->BelongsTo(Question::class);
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->HasMany(Vote::class);
     }
 }

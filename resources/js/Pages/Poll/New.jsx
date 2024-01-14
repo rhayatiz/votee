@@ -100,85 +100,65 @@ const New = () => {
         }
     }
 
-    const test = (e) => {
-        e.preventDefault()
-        const token = document.head.querySelector('meta[name="csrf-token"]').content
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
-            body: JSON.stringify({ title: 'React Hooks POST Request Example' })
-        }
-
-        fetch('/test', requestOptions)
-            .then(res => res.json())
-            .then(res => console.log(res))
-
-
-        // router.post(('/test'))
-    }
 
     return (
         <>
             <Head>
                 <title>Nouveau sondage</title>
             </Head>
-            <Navbar />
-            <Container>
-                <Title order={2}>Nouveau sondage</Title>
-                <Box className='shadow-lg rounded-xl
-                        p-2 sm:p-8'>
-                    <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-                        <Box pos={'relative'}>
-                            <LoadingOverlay visible={loading} zIndex={1000}/>
-                            <Space my={'md'} />
-                            <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
-                            {...form.getInputProps('title')} />
-                            <Space my={'md'} />
-                            <PollSimpleForm form={form}/>
-                            
-                            <Space my={'xl'} />
-                            <Card className='bg-gray-50/50' shadow='lg' radius={'md'}>
-                                <Switch
-                                    size={'sm'}
-                                    label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
-                                    color="teal"
-                                    {...form.getInputProps('isProtected', {type: 'checkbox'})}
-                                />
-                                {form.values.isProtected &&
-                                    <>
-                                        <Space my={'md'} />
-                                        <PasswordInput
-                                            placeholder="Mot de passe"
-                                            label="Mot de passe"
-                                            description="Ce code vous permettra d'accéder aux résultats du sondage"
-                                            withAsterisk
-                                            {...form.getInputProps('password')}
-                                            />
-                                    </>
+            <div className='min-h-screen'>
+                <Navbar />
+                <Container>
+                    <Title order={2}>Nouveau sondage</Title>
+                    <Box className='shadow-lg rounded-xl
+                            p-2 sm:p-8'>
+                        <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
+                            <Box pos={'relative'}>
+                                <LoadingOverlay visible={loading} zIndex={1000}/>
+                                <Space my={'md'} />
+                                <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
+                                {...form.getInputProps('title')} />
+                                <Space my={'md'} />
+                                <PollSimpleForm form={form}/>
+                                
+                                <Space my={'xl'} />
+                                {/* <Card className='bg-gray-50/50' shadow='lg' radius={'md'}>
+                                    <Switch
+                                        size={'sm'}
+                                        label={<Text fz={'sm'} weight={300}><AiOutlineUnlock className='relative top-[0.9px]' />{' '}Protégez les résultats avec un mot de passe</Text>}
+                                        color="teal"
+                                        {...form.getInputProps('isProtected', {type: 'checkbox'})}
+                                    />
+                                    {form.values.isProtected &&
+                                        <>
+                                            <Space my={'md'} />
+                                            <PasswordInput
+                                                placeholder="Mot de passe"
+                                                label="Mot de passe"
+                                                description="Ce code vous permettra d'accéder aux résultats du sondage"
+                                                withAsterisk
+                                                {...form.getInputProps('password')}
+                                                />
+                                        </>
+                                    }
+                                </Card> */}
+                                {errors.length > 0 &&
+                                    <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
+                                        <List size={'sm'}>
+                                            {errors.map((err, idx) => <List.Item key={idx}><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
+                                        </List>
+                                    </Card>
                                 }
-                            </Card>
-                            {errors.length > 0 &&
-                                <Card className='bg-red-50/80' mt={'md'} radius={'lg'} py={'sm'}>
-                                    <List size={'sm'}>
-                                        {errors.map((err, idx) => <List.Item key={idx}><Text size={'sm'} fw={'sm'} className=' text-red-500'>{err}</Text></List.Item>)}
-                                    </List>
-                                </Card>
-                            }
-                        </Box>
+                            </Box>
 
-                        <Button disabled={loading} size='lg' fz={"md"} 
-                            radius={"md"} type='submit' color='teal' 
-                            fullWidth mt={'lg'}>Créer</Button>
-                    </form>
-
-                    <form onSubmit={test}>
-                        <Button 
+                            <Button disabled={loading} size='lg' fz={"md"} 
                                 radius={"md"} type='submit' color='teal' 
-                                fullWidth mt={'lg'}>test</Button>
-                    </form>
-                </Box>
-            </Container>
-            <Footer />
+                                fullWidth mt={'lg'}>Créer</Button>
+                        </form>
+                    </Box>
+                </Container>
+                <Footer className={"relative"} />
+            </div>
         </>
     )
 }

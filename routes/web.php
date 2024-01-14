@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EntryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\VoteController;
@@ -22,10 +23,11 @@ Route::prefix('poll')->group(function () {
     Route::post('/', [PollController::class, 'create']);
     Route::get('/success', [PollController::class, 'created'])->name('poll.created');
     Route::get('/{slug}', [PollController::class, 'show'])->name('poll.show');
+    Route::get('/{slug}/results', [PollController::class, 'showResults'])->name('poll.results');
 });
 
-Route::prefix('vote')->group(function () {
-    Route::post('/submit', [VoteController::class, 'submit']);
+Route::prefix('entry')->group(function () {
+    Route::post('/submit', [EntryController::class, 'create']);
 });
 
 Route::post('/test', [Pollcontroller::class, 'test']);

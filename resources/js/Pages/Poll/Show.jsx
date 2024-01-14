@@ -7,30 +7,25 @@ import { Head } from '@inertiajs/inertia-react';
 import { router } from "@inertiajs/react";
 import { memo, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import ErrorCard from "../../components/ErrorCard";
+import QuestionTitle from "../../components/QuestionTitle";
 // import { useForm } from "@mantine/form";
 
 const Show = ({poll}) => {
-    const { register, formState: { errors }, handleSubmit, getValues, trigger } = useForm()
-    const [errorArray, setErrorArray] = useState([])
-
-    useEffect(() => {
-        trigger()
-    }, [])
+    const { register, formState: { errors }, handleSubmit } = useForm()
     
-    const QuestionTitle = ({index, title}) => {
-        const idx = index ? index + '. ' : ''
-        return (<Title mb={'lg'} order={4}>{idx}{title}</Title>)
-    }
-
-    const RenderResponses = ({question}) => {
+    const RenderResponses = ({index, question}) => {
+        const title = <QuestionTitle index={index} title={question.label} />
         switch (question.type) {
             case 'radio':
                 return (
                     <Box>
-                        <QuestionTitle title={question.label} />
+                        {title}
                         <Stack>
                             {question.responses.map((response, index) => 
                                 <Radio 
+                                    size={'md'}
+                                    color={'teal'}
                                     name={question.id} 
                                     key={index} 
                                     value={response.id} 
@@ -39,16 +34,18 @@ const Show = ({poll}) => {
                                 />
                             )}
                         </Stack>
+                        {errors[question.id] && <ErrorCard error={errors[question.id].message}/>}
                     </Box>
                 )
 
             case 'checkbox':
                 return (    
                     <Box>
-                        <QuestionTitle title={question.label} />
+                        {title}
                         <Stack>
                                 {question.responses.map((response, index) => 
-                                    <Checkbox 
+                                    <Checkbox size={'md'}
+                                        color={'teal'}
                                         name={`${question.id}`} 
                                         key={response.id} 
                                         value={response.id} 
@@ -57,16 +54,21 @@ const Show = ({poll}) => {
                                     />
                                 )}
                         </Stack>
+                        {errors[question.id] && <ErrorCard error={errors[question.id].message}/>}
                     </Box>
                 )
 
             case 'input':
                 return (    
-                    <TextInput
-                        label={<QuestionTitle title={question.label} />}
-                        description={question.responses[0].label}
-                        {...register(`${question.id}`, { required: "Champ obligatoire" })}
-                    />)
+                    <Box>
+                        <TextInput
+                            label={title}
+                            description={question.responses[0].label}
+                            {...register(`${question.id}`, { required: "Champ obligatoire" })}
+                        />
+                        {errors[question.id] && <ErrorCard error={errors[question.id].message}/>}
+                    </Box>
+                )
 
             default:
                 return <></>
@@ -75,8 +77,18 @@ const Show = ({poll}) => {
     }
 
 
-    const handleData = (e) => {
-        e.preventDefault()
+    const handleData = (data) => {
+        let body = {data: data, pollId: poll.id}
+        const token = document.head.querySelector('meta[name="csrf-token"]').content
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
+            body: JSON.stringify(body)
+        }
+
+        fetch('/entry/submit', requestOptions)
+            .then(res => res.json())
+            .then(res => console.log(res))
     }
 
 
@@ -85,25 +97,27 @@ const Show = ({poll}) => {
             <Head>
                 <title>{poll.title}</title>
             </Head>
-            <Navbar />
-            <Container>
-                <Box my={'lg'}>
-                    <Title order={1}>Sondage: {poll.title}</Title>
-                </Box>
-                <form onSubmit={handleData}>
-                    {poll.questions.map((question, idx) => 
-                        <Box key={idx} className="mt-2 shadow-md bg-gray-50 p-6 rounded-lg relative">
-                            <RenderResponses question={question} />
-                        </Box>
-                    )}
-                    <ErrorsList errors={errors} />
-                    <Button type="submit" size='lg' fz={"md"} 
-                                radius={"md"} color='teal' 
-                                fullWidth mt={'lg'}>Soumettre</Button>
-                </form>
+            <div className='min-h-screen'>
+                <Navbar />
+                <Container>
+                    <Box my={'lg'}>
+                        <Title order={1}>Sondage: {poll.title}</Title>
+                    </Box>
+                    <form onSubmit={handleSubmit(handleData)}>
+                        {poll.questions.map((question, idx) => 
+                            <Box key={idx} className="mt-2 shadow-md bg-gray-50 p-6 rounded-lg relative">
+                                <RenderResponses index={idx + 1} question={question} />
+                            </Box>
+                        )}
+                        <ErrorsList errors={errors} />
+                        <Button type="submit" size='lg' fz={"md"} 
+                                    radius={"md"} color='teal' 
+                                    fullWidth mt={'lg'}>Soumettre</Button>
+                    </form>
 
-            </Container>
-            <Footer />
+                </Container>
+                <Footer className="relative" />
+            </div>
         </>
     )
 }

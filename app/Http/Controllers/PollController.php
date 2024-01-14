@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Entry;
 use App\Models\Poll;
 use App\Models\Question;
 use App\Models\Response;
@@ -49,7 +50,7 @@ class PollController extends Controller
         }
         DB::commit();
             
-        $link = $slugService->getPollLink($slug);
+        // $link = $slugService->getPollLink($slug);
 
         // redirect not working properly
         return redirect()->route('poll.created',[
@@ -77,11 +78,27 @@ class PollController extends Controller
         ]);
     }
 
-    public function test()
+    public function showResults(string $slug, PollRepository $pollRepository)
     {
+        $poll = $pollRepository->findBySlug($slug);
+        $id = $poll->id;
+        $poll = Poll::with('questions', 'questions.responses', 'questions.votes', 'questions.responses.votes')->find($id);
+        $entries = Entry::where('poll_id', $id);
+        $entriesCount = $entries->count();
+
+        return Inertia::render('Poll/Results', [
+            'poll' => $poll,
+            'entriesCount' => $entriesCount
+        ]);
+    }
+
+    public function test(Request $request)
+    {
+        $ip = $request->getClientIp();
         return response()->json([
             'slug' => 'EZAL4343',
-            'word' => 'word'
+            'word' => 'word',
+            'ip' => $ip
         ]);
         return Inertia::location(route('home'));
         return to_route('poll.show', ['slug' => 'www']);

@@ -21,7 +21,7 @@ const Home = () => {
             <div className='min-h-screen'>
                 <Navbar />
                 <HomeHeroSection />
-                <Footer className={'absolute bottom-4'} />
+                <Footer />
             </div>
         </>
     )
