@@ -1,7 +1,8 @@
 
-import { createStyles, Header, Menu, Group, Center, Burger, Container, rem, Title } from '@mantine/core';
+import { createStyles, Header, Menu, Group, Center, Burger, Container, rem, Title, Image } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { TbChevronDown } from 'react-icons/tb';
+import logo from '../../images/logo_light_theme.png'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -124,7 +125,7 @@ export default function Navbar() {
         <div className={classes.inner}>
           <Center>
             <a href="/" className='no-underline text-black'>
-              <Title order={2}>votee</Title>
+              <Image src={logo} maw={100} />
             </a>
           </Center>
           <Group spacing={5} className={classes.links}>

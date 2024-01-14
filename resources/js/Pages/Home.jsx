@@ -16,10 +16,13 @@ const Home = () => {
         <>
             <Head>
                 <title>Création de sondages gratuits</title>
+                <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             </Head>
-            <Navbar />
-            <HomeHeroSection />
-            <Footer />
+            <div className='min-h-screen'>
+                <Navbar />
+                <HomeHeroSection />
+                <Footer className={'absolute bottom-4'} />
+            </div>
         </>
     )
 }

@@ -76,4 +76,15 @@ class PollController extends Controller
             'poll' => $poll
         ]);
     }
+
+    public function test()
+    {
+        return response()->json([
+            'slug' => 'EZAL4343',
+            'word' => 'word'
+        ]);
+        return Inertia::location(route('home'));
+        return to_route('poll.show', ['slug' => 'www']);
+    }
+
 }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="58" viewBox="0 0 168 58">
+  <g id="Groupe_1" data-name="Groupe 1" transform="translate(-19 -49)">
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="12" height="25" rx="2" transform="translate(19 70)" fill="#f6d323"/>
+    <rect id="Rectangle_2" data-name="Rectangle 2" width="12" height="34" rx="2" transform="translate(33 61)" fill="#27b585"/>
+    <rect id="Rectangle_3" data-name="Rectangle 3" width="12" height="28" rx="2" transform="translate(47 67)" fill="#4361c7"/>
+    <text id="votee" transform="translate(63 49)" fill="#444" font-size="47" font-family="Righteous-Regular, Righteous" letter-spacing="-0.02em"><tspan x="0" y="46">votee</tspan></text>
+  </g>
+</svg>

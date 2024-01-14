@@ -100,6 +100,23 @@ const New = () => {
         }
     }
 
+    const test = (e) => {
+        e.preventDefault()
+        const token = document.head.querySelector('meta[name="csrf-token"]').content
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
+            body: JSON.stringify({ title: 'React Hooks POST Request Example' })
+        }
+
+        fetch('/test', requestOptions)
+            .then(res => res.json())
+            .then(res => console.log(res))
+
+
+        // router.post(('/test'))
+    }
+
     return (
         <>
             <Head>
@@ -152,6 +169,12 @@ const New = () => {
                         <Button disabled={loading} size='lg' fz={"md"} 
                             radius={"md"} type='submit' color='teal' 
                             fullWidth mt={'lg'}>Créer</Button>
+                    </form>
+
+                    <form onSubmit={test}>
+                        <Button 
+                                radius={"md"} type='submit' color='teal' 
+                                fullWidth mt={'lg'}>test</Button>
                     </form>
                 </Box>
             </Container>

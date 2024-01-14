@@ -91,14 +91,14 @@ export function HomeHeroSection() {
   const { classes } = useStyles();
 
   return (
-    <Container className={classes.wrapper} size={1400}>
+    <Container className={`${classes.wrapper}`} size={1400}>
       <Dots className={classes.dots} style={{ left: 0, top: 0 }} />
       <Dots className={classes.dots} style={{ left: 60, top: 0 }} />
       <Dots className={classes.dots} style={{ left: 0, top: 140 }} />
       <Dots className={classes.dots} style={{ right: 0, top: 60 }} />
 
       <div className={classes.inner}>
-        <Title className={classes.title}>
+        <Title className={`${classes.title} text-slate-700`}>
           Créez vos{' '}
           <Text component="span" className={classes.highlight} inherit>
             sondages
@@ -107,7 +107,7 @@ export function HomeHeroSection() {
         </Title>
 
         <Container p={0} size={600}>
-          <Text size="lg" color="dimmed" className={classes.description}>
+          <Text size="md" color="dimmed" className={classes.description}>
             Créez gratuitement vos sondages, publiez, recueillez et visualisez vos résultats.
           </Text>
         </Container>

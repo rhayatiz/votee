@@ -27,3 +27,5 @@ Route::prefix('poll')->group(function () {
 Route::prefix('vote')->group(function () {
     Route::post('/submit', [VoteController::class, 'submit']);
 });
+
+Route::post('/test', [Pollcontroller::class, 'test']);

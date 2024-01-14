@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\PollRepository;
-use Hashids\Hashids;
 use Illuminate\Support\Facades\URL;
 use Ramsey\Uuid\Uuid;
 
@@ -11,7 +10,6 @@ class PollService
 {
 
     public function __construct(
-        private Hashids $hashIds,
         private PollRepository $pollRepository
     ) {
     }
