@@ -189,9 +189,9 @@ const New = () => {
                                 : <IoMdCloseCircleOutline size={50}  className="text-red-400" />
                             }
                             <Text my={'xl'} fz={'md'} className="text-gray-700" weight={600}>{opened.message}</Text>
-                            <Text my={'xl'} fz={'md'} className="text-gray-700" weight={400}>Vous pouvez désormais visiter votre sondage sur le lien suivant</Text>
+                            <Text my={'xl'} fz={'md'} className="text-gray-700 px-3" weight={400}>Vous pouvez désormais visiter votre sondage sur le lien suivant</Text>
 
-                            <Flex className='relative'>
+                            <Flex  className='font-light relative w-full border border-solid border-gray-200 py-2 rounded-sm justify-around'>
                                 <Anchor href={opened.link}>{opened.link}</Anchor>
                                 <Box className="relative left-2 bottom-[0.5]" >
                                     <CopyButton value={opened.link} timeout={2000}>

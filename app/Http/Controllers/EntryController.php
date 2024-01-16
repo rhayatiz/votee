@@ -25,7 +25,26 @@ class EntryController extends Controller
         $data = $request->json()->all();
         $responsesArray = $data['data'];
         $pollId = $data['pollId'];
+        $entry = Entry::where([
+            ['visitor', $ip],
+            ['poll_id', $pollId]
+            ])->first();
         $poll = Poll::find($pollId);
+        $link = $this->slugService->getResultsLink($poll->slug);
+
+        if ($entry) {
+            return response()->json([
+                'success' => true,
+                'result' => [
+                    'data' => [
+                        'resultsLink' => $link
+                    ],
+                    'message' => 'Vous avez déjà participé à ce sondage.'
+                ],
+                'errors' => []
+            ]);
+        }
+
 
         DB::beginTransaction();
         try {
@@ -72,7 +91,6 @@ class EntryController extends Controller
         }
         DB::commit();
 
-        $link = $this->slugService->getResultsLink($poll->slug);
 
         return response()->json([
             'success' => true,
