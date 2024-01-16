@@ -39,7 +39,7 @@ export default function PollSimpleForm(props) {
 
     return (
         <>
-            <Box className="rounded-lg border border-red-700">
+            <Box className="rounded-lg border border-red-700 mt-11">
                 {form.values.questions.map((row, idx) => 
                     <QuestionRow key={row.key} row={row} idx={idx+1} questionIndex={idx}
                         removeQuestionHandler={removeQuestion} form={props.form} />)}

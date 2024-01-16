@@ -46,15 +46,25 @@ class PollController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             // handle exception error UI
+            // handle exception error UI
+            return response()->json([
+                "message" => "Une erreur à été rencontrée"
+            ], 500);
             dd($th);
         }
         DB::commit();
             
-        // $link = $slugService->getPollLink($slug);
+        $link = $slugService->getPollLink($slug);
 
-        // redirect not working properly
-        return redirect()->route('poll.created',[
-            'poll' => $slug
+        return response()->json([
+            'success' => true,
+            'result' => [
+                'data' => [
+                    'pollLink' => $link
+                ],
+                'message' => 'Votre sondage à bien été créé'
+            ],
+            'errors' => []
         ]);
     }
 

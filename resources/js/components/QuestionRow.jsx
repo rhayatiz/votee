@@ -51,7 +51,7 @@ export default function QuestionRow({row, idx, removeQuestionHandler, form, ques
     </Group>
 
     return (
-        <Box className="mt-2 shadow-md bg-gray-50 px-4 py-2 rounded-lg relative">
+        <Box className="mt-8 shadow-md bg-gray-50 px-4 py-2 rounded-lg relative">
             <Group position="right" pos={'absolute'} className="top-1 right-12">
                 <ActionIcon  onClick={() => removeQuestionHandler(row.id)} variant="transparent" color="red">
                     <Flex><Text fz={'sm'} weight={400}>Retirer</Text><AiOutlineCloseCircle className="relative top-[2px] left-1" size={16} /></Flex>

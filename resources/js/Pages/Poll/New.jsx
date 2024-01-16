@@ -1,4 +1,4 @@
-import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch, Loader, LoadingOverlay } from '@mantine/core';
+import { Button, Container, Checkbox, TextInput, Select, Space, Box, PasswordInput, Title, Card, Text, List, Switch, Tooltip, LoadingOverlay, Modal, Anchor, Center, CopyButton, ActionIcon, Flex, Group } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Head } from '@inertiajs/inertia-react';
@@ -10,13 +10,16 @@ import Footer from '../../components/Footer';
 import { router } from '@inertiajs/react'
 import { useForm } from '@mantine/form';
 import { randomId, useDidUpdate } from "@mantine/hooks"
+import { IoIosCheckmarkCircleOutline, IoMdCloseCircleOutline } from 'react-icons/io';
+import { MdContentCopy, MdCheck } from 'react-icons/md';
 
 const New = () => {
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(false)
+    const [opened, setOpened] = useState(false)
     const form = useForm({
         initialValues: {
-            title: 'random question?',
+            title: '',
             isProtected: false,
             password: '',
             questions: [
@@ -91,11 +94,32 @@ const New = () => {
             setErrors(['Veuillez renseigner les champs nécessaires'])
         } else {
             if (errors.length == 0) {
-                console.log('posting')
-                setTimeout(() => {
-                    // setLoading(true)
-                    router.post('/poll', values)
-                }, 1000);
+                let body = values
+                const token = document.head.querySelector('meta[name="csrf-token"]').content
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
+                    body: JSON.stringify(body)
+                }
+        
+                setLoading(true)
+                fetch('/poll', requestOptions)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.success) {
+                            console.log('res', res)
+                            setOpened({
+                                success: res.success,
+                                message: res.result.message,
+                                link: res.result.data.pollLink
+                            })
+                            return
+                        }
+                        setOpened({
+                            message: res.message
+                        })
+                        console.log('opened', opened)
+                    })
             }
         }
     }
@@ -108,17 +132,17 @@ const New = () => {
             </Head>
             <div className='min-h-screen'>
                 <Navbar />
-                <Container>
+                <Container pos={"relative"}>
+                    <LoadingOverlay visible={loading} overlayBlur={2} radius={""} />
                     <Title order={2}>Nouveau sondage</Title>
                     <Box className='shadow-lg rounded-xl
                             p-2 sm:p-8'>
                         <form className='py-4' onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                             <Box pos={'relative'}>
-                                <LoadingOverlay visible={loading} zIndex={1000}/>
                                 <Space my={'md'} />
-                                <TextInput size='md' placeholder="Questionnaire rentrée" label="Titre" withAsterisk 
+                                <TextInput size='md' mb={'xl'} placeholder="Ex: questionnaire rentrée 2023" label="Titre du sondage" withAsterisk 
                                 {...form.getInputProps('title')} />
-                                <Space my={'md'} />
+                                <Space my={'xl'} />
                                 <PollSimpleForm form={form}/>
                                 
                                 <Space my={'xl'} />
@@ -158,6 +182,52 @@ const New = () => {
                     </Box>
                 </Container>
                 <Footer className={"relative"} />
+                <Modal zIndex={999} radius={'lg'} opened={opened} onClose={() => {return}} withCloseButton={false} centered>
+                        <Center className="flex flex-col py-3">
+                            {opened.success
+                                ? <IoIosCheckmarkCircleOutline size={50} className="text-teal-500" />
+                                : <IoMdCloseCircleOutline size={50}  className="text-red-400" />
+                            }
+                            <Text my={'xl'} fz={'md'} className="text-gray-700" weight={600}>{opened.message}</Text>
+                            <Text my={'xl'} fz={'md'} className="text-gray-700" weight={400}>Vous pouvez désormais visiter votre sondage sur le lien suivant</Text>
+
+                            <Flex className='relative'>
+                                <Anchor href={opened.link}>{opened.link}</Anchor>
+                                <Box className="relative left-2 bottom-[0.5]" >
+                                    <CopyButton value={opened.link} timeout={2000}>
+                                        {({ copied, copy }) => (
+                                            <Tooltip label={copied ? 'Copié' : 'Copier'} withArrow position="right">
+                                                <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
+                                                    {copied ? (
+                                                    <MdCheck size={16} />
+                                                    ) : (
+                                                    <MdContentCopy size={16} />
+                                                    )}
+                                                </ActionIcon>
+                                            </Tooltip>
+                                        )}
+                                    </CopyButton>
+                                </Box>
+                            </Flex>
+
+                            {opened.success
+                                ? <> <Button  size='lg' fz={"md"} 
+                                    radius={"md"} color='teal' 
+                                    fullWidth mt={'lg'}
+                                    variant="outline"
+                                    component="a"
+                                    href="/"
+                                    >Accueil</Button>
+                                </>
+                                : <Button  size='lg' fz={"md"} 
+                                            radius={"md"} color='teal' 
+                                            fullWidth mt={'lg'}
+                                            variant="outline"
+                                            onClick={() => {setOpened(false); setLoading(false)}}
+                                            >Réessayer</Button>
+                            }
+                        </Center> 
+                </Modal>  
             </div>
         </>
     )

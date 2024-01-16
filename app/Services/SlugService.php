@@ -40,7 +40,7 @@ class SlugService
 
     public function getPollLink(string $slug): string
     {
-        return URL::to('') . '/' . $slug;
+        return URL::to('') . '/poll/' . $slug;
     }
 
     public function getResultsLink(string $slug): string
