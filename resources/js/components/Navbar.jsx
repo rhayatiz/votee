@@ -1,8 +1,9 @@
 
-import { createStyles, Header, Menu, Group, Center, Burger, Container, rem, Title, Image } from '@mantine/core';
+import { createStyles, Header, Menu, Group, Center, Burger, Container, rem, Title, Image, List, Box, Card, Transition, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { TbChevronDown } from 'react-icons/tb';
 import logo from '../../images/logo_light_theme.png'
+import NabbarMobileMenu from './NavbarMobileMenu';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -94,7 +95,6 @@ export default function Navbar() {
             <a
               href={link.link}
               className={classes.link}
-              onClick={(event) => event.preventDefault()}
             >
               <Center>
                 <span className={classes.linkLabel}>{link.label}</span>
@@ -112,7 +112,6 @@ export default function Navbar() {
         key={link.label}
         href={link.link}
         className={classes.link}
-        onClick={(event) => event.preventDefault()}
       >
         {link.label}
       </a>
@@ -120,7 +119,7 @@ export default function Navbar() {
   });
 
   return (
-    <Header height={56} mb={90}>
+    <Header height={56} mb={90} zIndex={900}>
       <Container>
         <div className={classes.inner}>
           <Center>
@@ -134,6 +133,8 @@ export default function Navbar() {
           <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
         </div>
       </Container>
+      <NabbarMobileMenu links={links} opened={opened} />
+
     </Header>
   );
 }

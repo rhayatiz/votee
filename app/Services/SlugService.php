@@ -43,4 +43,9 @@ class SlugService
         return URL::to('') . '/' . $slug;
     }
 
+    public function getResultsLink(string $slug): string
+    {
+        return URL::to('') . '/poll/' . $slug . '/results';
+    }
+
 }

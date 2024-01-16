@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entry;
+use App\Models\Poll;
 use App\Models\Question;
 use App\Models\Vote;
 use App\Repositories\PollRepository;
+use App\Services\SlugService;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,7 @@ class EntryController extends Controller
 {
 
     public function __construct(
+        private SlugService $slugService
     ) {}
 
     public function create(Request $request)
@@ -22,6 +25,7 @@ class EntryController extends Controller
         $data = $request->json()->all();
         $responsesArray = $data['data'];
         $pollId = $data['pollId'];
+        $poll = Poll::find($pollId);
 
         DB::beginTransaction();
         try {
@@ -61,14 +65,24 @@ class EntryController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             // handle exception error UI
+            return response()->json([
+                "message" => "Une erreur à été rencontrée"
+            ], 500);
             dd($th);
         }
         DB::commit();
 
+        $link = $this->slugService->getResultsLink($poll->slug);
+
         return response()->json([
-            'slug' => 'EZAL4343',
-            'word' => 'word',
-            'ip' => $ip
+            'success' => true,
+            'result' => [
+                'data' => [
+                    'resultsLink' => $link
+                ],
+                'message' => 'Vote enregistré'
+            ],
+            'errors' => []
         ]);
     }
 }
