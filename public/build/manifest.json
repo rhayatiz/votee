@@ -1,0 +1,134 @@
+{
+  "_Button-fd3616fd.js": {
+    "file": "assets/Button-fd3616fd.js",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_Footer-57e48d44.js": {
+    "assets": [
+      "assets/logo_light_theme-f9d1abb3.png"
+    ],
+    "file": "assets/Footer-57e48d44.js",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_QuestionTitle-3435c31c.js": {
+    "file": "assets/QuestionTitle-3435c31c.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js"
+    ]
+  },
+  "_Stack-b062be53.js": {
+    "file": "assets/Stack-b062be53.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js"
+    ]
+  },
+  "_Tooltip-4c427663.js": {
+    "file": "assets/Tooltip-4c427663.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js"
+    ]
+  },
+  "_index.esm-700ee81d.js": {
+    "file": "assets/index.esm-700ee81d.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js",
+      "_Button-fd3616fd.js"
+    ]
+  },
+  "_index.esm-b8825b00.js": {
+    "file": "assets/index.esm-b8825b00.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-48fa0ceb.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/images/logo_light_theme.png": {
+    "file": "assets/logo_light_theme-f9d1abb3.png",
+    "src": "resources/images/logo_light_theme.png"
+  },
+  "resources/js/Pages/Home.jsx": {
+    "file": "assets/Home-75eb490e.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js",
+      "_Button-fd3616fd.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Pages/Home.jsx"
+  },
+  "resources/js/Pages/Poll/Created.jsx": {
+    "file": "assets/Created-1f225c53.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_index.esm-b8825b00.js",
+      "_Footer-57e48d44.js",
+      "_Tooltip-4c427663.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Pages/Poll/Created.jsx"
+  },
+  "resources/js/Pages/Poll/New.jsx": {
+    "file": "assets/New-d85b8f8d.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js",
+      "_Stack-b062be53.js",
+      "_index.esm-700ee81d.js",
+      "_Button-fd3616fd.js",
+      "_index.esm-b8825b00.js",
+      "_Tooltip-4c427663.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Pages/Poll/New.jsx"
+  },
+  "resources/js/Pages/Poll/Results.jsx": {
+    "file": "assets/Results-a432dbad.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js",
+      "_QuestionTitle-3435c31c.js",
+      "_Stack-b062be53.js",
+      "_Tooltip-4c427663.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Pages/Poll/Results.jsx"
+  },
+  "resources/js/Pages/Poll/Show.jsx": {
+    "file": "assets/Show-705a0346.js",
+    "imports": [
+      "resources/js/app.jsx",
+      "_Footer-57e48d44.js",
+      "_Stack-b062be53.js",
+      "_index.esm-700ee81d.js",
+      "_QuestionTitle-3435c31c.js",
+      "_Button-fd3616fd.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Pages/Poll/Show.jsx"
+  },
+  "resources/js/app.jsx": {
+    "dynamicImports": [
+      "resources/js/Pages/Home.jsx",
+      "resources/js/Pages/Poll/Created.jsx",
+      "resources/js/Pages/Poll/New.jsx",
+      "resources/js/Pages/Poll/Results.jsx",
+      "resources/js/Pages/Poll/Show.jsx"
+    ],
+    "file": "assets/app-847477af.js",
+    "isEntry": true,
+    "src": "resources/js/app.jsx"
+  }
+}
