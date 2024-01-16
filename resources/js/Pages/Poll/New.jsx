@@ -9,7 +9,7 @@ import { AiOutlineUnlock } from 'react-icons/ai'
 import Footer from '../../components/Footer';
 import { router } from '@inertiajs/react'
 import { useForm } from '@mantine/form';
-import { randomId, useDidUpdate } from "@mantine/hooks"
+import { randomId, useClipboard, useDidUpdate } from "@mantine/hooks"
 import { IoIosCheckmarkCircleOutline, IoMdCloseCircleOutline } from 'react-icons/io';
 import { MdContentCopy, MdCheck } from 'react-icons/md';
 
@@ -17,6 +17,7 @@ const New = () => {
     const [errors, setErrors] = useState([])
     const [loading, setLoading] = useState(false)
     const [opened, setOpened] = useState(false)
+    const clipboard = useClipboard({ timeout: 1400 })
     const form = useForm({
         initialValues: {
             title: '',
@@ -194,19 +195,15 @@ const New = () => {
                             <Flex  className='font-light relative w-full border border-solid border-gray-200 py-2 rounded-sm justify-around'>
                                 <Anchor href={opened.link}>{opened.link}</Anchor>
                                 <Box className="relative left-2 bottom-[0.5]" >
-                                    <CopyButton value={opened.link} timeout={2000}>
-                                        {({ copied, copy }) => (
-                                            <Tooltip label={copied ? 'Copié' : 'Copier'} withArrow position="right">
-                                                <ActionIcon color={copied ? 'teal' : 'gray'} variant="subtle" onClick={copy}>
-                                                    {copied ? (
-                                                    <MdCheck size={16} />
-                                                    ) : (
-                                                    <MdContentCopy size={16} />
-                                                    )}
-                                                </ActionIcon>
-                                            </Tooltip>
-                                        )}
-                                    </CopyButton>
+                                    <Tooltip label={clipboard.copied ? 'Copié' : 'Copier'} withArrow position="right">
+                                        <ActionIcon color={clipboard.copied ? 'teal' : 'gray'} variant="subtle" onClick={() => clipboard.copy(opened.link)}>
+                                            {clipboard.copied ? (
+                                            <MdCheck size={16} />
+                                            ) : (
+                                            <MdContentCopy size={16} />
+                                            )}
+                                        </ActionIcon>
+                                    </Tooltip>
                                 </Box>
                             </Flex>
 
