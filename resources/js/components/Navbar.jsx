@@ -56,10 +56,10 @@ export default function Navbar() {
         "link": "/poll",
         "label": "Nouveau sondage"
       },
-      {
-        "link": "/faq",
-        "label": "FAQ"
-      },
+      // {
+      //   "link": "/faq",
+      //   "label": "FAQ"
+      // },
       // {
       //   "link": "#2",
       //   "label": "Support",
