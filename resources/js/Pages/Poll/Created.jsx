@@ -9,6 +9,11 @@ const Created = ({link}) => {
         <>
             <Head>
                 <title>Nouveau sondage</title>
+                <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+                <meta name="robots" content="index, follow" />
+                <meta name="description" content="Créez vos sondages gratuitement et sans inscription sur Votee, diffusez votre sondage sur les réseaux et visualisez vos résultats." />
+                <meta id="meta-description" name="description" content="Créez vos sondages gratuitement et sans inscription sur Votee, diffusez votre sondage sur les réseaux et visualisez vos résultats." />
+                <meta id="og-title" property="og:title" content="Votee" />
             </Head>
             <Navbar />
             <Container>
